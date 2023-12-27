@@ -14,6 +14,7 @@ import "@thirdweb-dev/contracts/extension/PrimarySale.sol";
 import "@thirdweb-dev/contracts/extension/DropSinglePhase1155.sol";
 import "@thirdweb-dev/contracts/extension/LazyMint.sol";
 import "@thirdweb-dev/contracts/extension/DelayedReveal.sol";
+import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
 
 import { CurrencyTransferLib } from "@thirdweb-dev/contracts/lib/CurrencyTransferLib.sol";
 import "@thirdweb-dev/contracts/lib/Strings.sol";
@@ -51,7 +52,8 @@ contract ERC1155Drop is
     PrimarySale,
     LazyMint,
     DelayedReveal,
-    DropSinglePhase1155
+    DropSinglePhase1155,
+    PermissionsEnumerable
 {
     using Strings for uint256;
 
@@ -88,6 +90,7 @@ contract ERC1155Drop is
         address _primarySaleRecipient
     ) ERC1155(_name, _symbol) {
         _setupOwner(_defaultAdmin);
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupDefaultRoyaltyInfo(_royaltyRecipient, _royaltyBps);
         _setupPrimarySaleRecipient(_primarySaleRecipient);
     }
@@ -363,6 +366,11 @@ contract ERC1155Drop is
 
     /// @dev Checks whether NFTs can be revealed in the given execution context.
     function _canReveal() internal view virtual returns (bool) {
+        return msg.sender == owner();
+    }
+
+    /// @dev Returns whether platform fee info can be set in the given execution context.
+    function _canSetPlatformFeeInfo() internal view virtual returns (bool) {
         return msg.sender == owner();
     }
 }
