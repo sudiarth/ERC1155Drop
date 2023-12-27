@@ -89,6 +89,8 @@ contract ERC1155Drop is
         uint128 _royaltyBps,
         address _primarySaleRecipient
     ) ERC1155(_name, _symbol) {
+        _setupOwner(_defaultAdmin);
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupDefaultRoyaltyInfo(_royaltyRecipient, _royaltyBps);
         _setupPrimarySaleRecipient(_primarySaleRecipient);
     }
