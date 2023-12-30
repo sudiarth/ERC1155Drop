@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "./ERC1155Drop.sol";
 
-contract SudigitalNFTEdition is ERC1155Drop {
+contract SudigitalERC1155Drop is ERC1155Drop {
     constructor(
         address _defaultAdmin,
         string memory _name,
